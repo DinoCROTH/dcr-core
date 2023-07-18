@@ -1,28 +1,43 @@
-QBConfig = {}
-QBConfig.MaxPlayers = GetConvarInt('sv_maxclients', 48) -- Gets max players from config file, default 48
-QBConfig.DefaultSpawn = vector4(-1035.71, -2731.87, 12.86, 0.0)
-QBConfig.UpdateInterval = 5 -- how often to update player data in minutes
-QBConfig.StatusInterval = 5000 -- how often to check hunger/thirst status in ms
-QBConfig.EnablePVP = true -- Enable or disable pvp on the server (Ability to shoot other players)
-QBConfig.Discord = "" -- Discord invite link
-QBConfig.ServerClosed = false -- Set server closed (no one can join except people with ace permission 'qbadmin.join')
-QBConfig.ServerClosedReason = "Server Closed" -- Reason for server being closed
-QBConfig.UseConnectQueue = true -- Use connectqueue resource for queue system
-QBConfig.Permissions = {'god', 'admin', 'mod'} -- Add as many groups as you want here after creating them in your server.cfg
+DCConfig = {}
 
-QBConfig.Money = {}
-QBConfig.Money.MoneyTypes = {['cash'] = 2, ['bank'] = 40} -- ['type']=startamount - Add or remove money types for your server (for ex. ['blackmoney']=0), remember once added it will not be removed from the database!
-QBConfig.Money.DontAllowMinus = {'cash'} -- Money that is not allowed going in minus
-QBConfig.Money.PayCheckTimeOut = 10 -- The time in minutes that it will give the paycheck
-QBConfig.Money.PayCheckSociety = false -- If true paycheck will come from the society account that the player is employed at, requires qb-bossmenu
+-- Server Settings
+DCConfig.MaxPlayers = GetConvarInt('sv_maxclients', 48) -- Maximum number of players allowed on the server (default: 48)
+DCConfig.DefaultSpawn = vector4(-1035.71, -2731.87, 12.86, 0.0) -- Default spawn location for players
+DCConfig.UpdateInterval = 5 -- Interval (in minutes) for updating player data
+DCConfig.StatusInterval = 5000 -- Interval (in milliseconds) for checking hunger and thirst status
+DCConfig.EnablePVP = true -- Enable or disable player-versus-player combat on the server
+DCConfig.Discord = "" -- Discord invite link
+DCConfig.ServerClosed = false -- Set server closed (no one can join except people with ace permission 'qbadmin.join')
+DCConfig.ServerClosedReason = "Server Closed" -- Reason for server being closed
+DCConfig.UseConnectQueue = true -- Use connectqueue resource for a queue system
+DCConfig.Permissions = {'god', 'admin', 'mod'} -- Permissions/groups for players on the server
 
-QBConfig.Player = {}
-QBConfig.Player.RevealMap = true
-QBConfig.Player.MaxWeight = 120000 -- Max weight a player can carry (currently 120kg, written in grams)
-QBConfig.Player.MaxInvSlots = 41 -- Max inventory slots for a player
-QBConfig.Player.HungerRate = 4.2 -- Rate at which hunger goes down.
-QBConfig.Player.ThirstRate = 3.8 -- Rate at which thirst goes down.
-QBConfig.Player.Bloodtypes = {
+-- Money Settings
+DCConfig.Money = {}
+DCConfig.Money.MoneyTypes = { -- ['type']=startamount - Add or remove money types for your server (for ex. ['blackmoney']=0), remember once added it will not be removed from the database!
+    ['cash'] = 50,
+    ['cents'] = 0,
+    ['bank'] = 200,
+    ['bloodmoney'] = 0,
+    ['gold'] = 0
+}
+DCConfig.Money.DontAllowMinus = { -- Money types not allowed to go into negative values
+    'cash',
+    'coins',
+    'gold',
+    'bloodmoney'
+}
+DCConfig.Money.PayCheckTimeOut = 30 -- Time in minutes for giving paychecks
+DCConfig.Money.PayCheckSociety = false -- If true, paychecks will come from the society account that the player is employed at
+
+-- Player Settings
+DCConfig.Player = {}
+DCConfig.Player.RevealMap = false -- Whether to reveal the map for players
+DCConfig.Player.MaxWeight = 120000 -- Maximum weight a player can carry (currently 120kg, written in grams)
+DCConfig.Player.MaxInvSlots = 41 -- Maximum inventory slots for a player
+DCConfig.Player.HungerRate = 4.2 -- Rate at which hunger decreases
+DCConfig.Player.ThirstRate = 3.8 -- Rate at which thirst decreases
+DCConfig.Player.Bloodtypes = {
     "A+",
     "A-",
     "B+",
@@ -33,9 +48,8 @@ QBConfig.Player.Bloodtypes = {
     "O-",
 }
 
--- Left side is level right side xp needed, you just have to add the skill here and in the metadata in servers/player.lua
--- You dont have to use this if you dont want to, just leave as is
-QBConfig.Levels = {
+-- Skill Levels
+DCConfig.Levels = {
     ["main"] = {
         [0] = 0,
         [1] = 50,
@@ -107,6 +121,7 @@ QBConfig.Levels = {
     },
 }
 
+-- Export the config table
 exports('GetConfig', function()
-    return QBConfig
+    return DCConfig
 end)
