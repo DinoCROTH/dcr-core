@@ -1,7 +1,7 @@
 fx_version 'cerulean'
 game 'rdr3'
-description 'QBCore RedM Edition'
-version '1.0.1'
+description 'Dinocore RedM'
+version '0.0.1'
 
 shared_scripts {
 	'shared/locale.lua',
