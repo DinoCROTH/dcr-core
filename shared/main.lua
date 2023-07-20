@@ -7,19 +7,19 @@ for i = 48,  57 do NumberCharset[#NumberCharset+1] = string.char(i) end
 for i = 65,  90 do StringCharset[#StringCharset+1] = string.char(i) end
 for i = 97, 122 do StringCharset[#StringCharset+1] = string.char(i) end
 
-QBShared.RandomStr = function(length)
+DCShared.RandomStr = function(length)
     if length <= 0 then return '' end
-    return QBShared.RandomStr(length - 1) .. StringCharset[math.random(1, #StringCharset)]
+    return DCShared.RandomStr(length - 1) .. StringCharset[math.random(1, #StringCharset)]
 end
-exports('RandomStr', QBShared.RandomStr)
+exports('RandomStr', DCShared.RandomStr)
 
-QBShared.RandomInt = function(length)
+DCShared.RandomInt = function(length)
     if length <= 0 then return '' end
-    return QBShared.RandomInt(length - 1) .. NumberCharset[math.random(1, #NumberCharset)]
+    return DCShared.RandomInt(length - 1) .. NumberCharset[math.random(1, #NumberCharset)]
 end
-exports('RandomInt', QBShared.RandomInt)
+exports('RandomInt', DCShared.RandomInt)
 
-QBShared.SplitStr = function(str, delimiter)
+DCShared.SplitStr = function(str, delimiter)
     local result = { }
     local from = 1
     local delim_from, delim_to = string.find(str, delimiter, from)
@@ -31,15 +31,15 @@ QBShared.SplitStr = function(str, delimiter)
 	result[#result+1] = string.sub(str, from)
     return result
 end
-exports('SplitStr', QBShared.SplitStr)
+exports('SplitStr', DCShared.SplitStr)
 
-QBShared.Trim = function(value)
+DCShared.Trim = function(value)
 	if not value then return nil end
     return (string.gsub(value, '^%s*(.-)%s*$', '%1'))
 end
-exports('Trim', QBShared.Trim)
+exports('Trim', DCShared.Trim)
 
-QBShared.Round = function(value, numDecimalPlaces)
+DCShared.Round = function(value, numDecimalPlaces)
     if not numDecimalPlaces then return math.floor(value + 0.5) end
     local power = 10 ^ numDecimalPlaces
     return math.floor((value * power) + 0.5) / (power)
@@ -57,7 +57,7 @@ exports('GetHorses', function()
 end)
 
 exports('GetItem', function(item)
-    if QBShared.Items[item] then
+    if DCShared.Items[item] then
         return DCShared.Items[item]
     end
 end)
@@ -77,3 +77,33 @@ end)
 exports('GetWeapons', function()
     return DCShared.Weapons
 end)
+
+-- DCShared.ChangeVehicleExtra = function (vehicle, extra, enable)
+-- 	if DoesExtraExist(vehicle, extra) then
+-- 		if enable then
+-- 			SetVehicleExtra(vehicle, extra, false)
+-- 			if not IsVehicleExtraTurnedOn(vehicle, extra) then
+-- 				DCShared.ChangeVehicleExtra(vehicle, extra, enable)
+-- 			end
+-- 		else
+-- 			SetVehicleExtra(vehicle, extra, true)
+-- 			if IsVehicleExtraTurnedOn(vehicle, extra) then
+-- 				DCShared.ChangeVehicleExtra(vehicle, extra, enable)
+-- 			end
+-- 		end
+-- 	end
+-- end
+-- exports('', )
+
+-- DCShared.SetDefaultVehicleExtras = function (vehicle, config)
+--     -- Clear Extras
+--     for i=1,20 do
+--         if DoesExtraExist(vehicle, i) then
+--             SetVehicleExtra(vehicle, i, 1)
+--         end
+--     end
+
+--     for id, enabled in pairs(config) do
+--         DCShared.ChangeVehicleExtra(vehicle, tonumber(id), true)
+--     end
+-- end
