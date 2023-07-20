@@ -1,42 +1,42 @@
-QBCore = {}
-QBCore.Blips = {}
-QBCore.Peds = {}
-QBCore.PlayerData = {}
-QBCore.ServerCallbacks = {}
+DCCore = {}
+DCCore.Blips = {}
+DCCore.Peds = {}
+DCCore.PlayerData = {}
+DCCore.ServerCallbacks = {}
 
 -- Shared
 
 exports('GetGangs', function()
-    return QBShared.Gangs
+    return DCShared.Gangs
 end)
 
 exports('GetHorses', function()
-    return QBShared.Horses
+    return DCShared.Horses
 end)
 
 exports('GetItems', function()
-    return QBShared.Items
+    return DCShared.Items
 end)
 
 exports('GetJobs', function()
-    return QBShared.Jobs
+    return DCShared.Jobs
 end)
 
 exports('GetVehicles', function()
-    return QBShared.Vehicles
+    return DCShared.Vehicles
 end)
 
 exports('GetWeapons', function()
-    return QBShared.Weapons
+    return DCShared.Weapons
 end)
 
 -- Player
 
 exports('GetPlayerData', function(cb)
     if cb then
-        cb(QBCore.PlayerData)
+        cb(DCCore.PlayerData)
     else
-        return QBCore.PlayerData
+        return DCCore.PlayerData
     end
 end)
 
@@ -48,7 +48,7 @@ end)
 
 exports('HasItem', function(item)
     local p = promise.new()
-    TriggerCallback('QBCore:HasItem', function(result)
+    TriggerCallback('DCCore:HasItem', function(result)
         p:resolve(result)
     end, item)
     return Citizen.Await(p)
@@ -57,7 +57,7 @@ end)
 -- Utility
 
 exports('Debug', function(resource, obj, depth)
-    TriggerServerEvent('QBCore:DebugSomething', resource, obj, depth)
+    TriggerServerEvent('DCCore:DebugSomething', resource, obj, depth)
 end)
 
 -- function TriggerCallback(event, ...)
@@ -68,8 +68,8 @@ end)
 -- end
 
 function TriggerCallback(name, cb, ...)
-    QBCore.ServerCallbacks[name] = cb
-    TriggerServerEvent('QBCore:Server:TriggerCallback', name, ...)
+    DCCore.ServerCallbacks[name] = cb
+    TriggerServerEvent('DCCore:Server:TriggerCallback', name, ...)
 end
 exports('TriggerCallback', TriggerCallback)
 
@@ -86,18 +86,18 @@ exports('LoadModel', LoadModel)
 exports('SpawnPed', function(name, model, x, y, z, w)
     if type(model) == 'string' then model = GetHashKey(model) end
     LoadModel(model)
-    QBCore.Peds[name] = CreatePed(model, x, y, z, w, true, true, 0, 0)
-    Citizen.InvokeNative(0x283978A15512B2FE, QBCore.Peds[name], true)
-    FreezeEntityPosition(QBCore.Peds[name], true)
-    SetEntityInvincible(QBCore.Peds[name], true)
-    SetBlockingOfNonTemporaryEvents(QBCore.Peds[name], true)
-    SetEntityCanBeDamagedByRelationshipGroup(QBCore.Peds[name], false, `PLAYER`)
-    SetEntityAsMissionEntity(QBCore.Peds[name], true, true)
+    DCCore.Peds[name] = CreatePed(model, x, y, z, w, true, true, 0, 0)
+    Citizen.InvokeNative(0x283978A15512B2FE, DCCore.Peds[name], true)
+    FreezeEntityPosition(DCCore.Peds[name], true)
+    SetEntityInvincible(DCCore.Peds[name], true)
+    SetBlockingOfNonTemporaryEvents(DCCore.Peds[name], true)
+    SetEntityCanBeDamagedByRelationshipGroup(DCCore.Peds[name], false, `PLAYER`)
+    SetEntityAsMissionEntity(DCCore.Peds[name], true, true)
 end)
 
 exports('RemovePed', function(name)
-    DeletePed(QBCore.Peds[name])
-    QBCore.Peds[name] = nil
+    DeletePed(DCCore.Peds[name])
+    DCCore.Peds[name] = nil
 end)
 
 -- Getters
@@ -128,7 +128,7 @@ exports('GetClosestPed', function(coords, ignoreList)
         coords = GetEntityCoords(ped)
     end
     local ignoreList = ignoreList or {}
-    local peds = exports['qbr-core']:GetPeds(ignoreList)
+    local peds = exports['dcr-core']:GetPeds(ignoreList)
     local closestDistance = -1
     local closestPed = -1
     for i = 1, #peds, 1 do
@@ -150,7 +150,7 @@ exports('GetClosestPlayer', function(coords)
     else
         coords = GetEntityCoords(ped)
     end
-    local closestPlayers = exports['qbr-core']:GetPlayersFromCoords(coords)
+    local closestPlayers = exports['dcr-core']:GetPlayersFromCoords(coords)
     local closestDistance = -1
     local closestPlayer = -1
     for i = 1, #closestPlayers, 1 do
@@ -270,7 +270,7 @@ end)
 
 exports('GetPlate',function(vehicle)
     if vehicle == 0 then return end
-    return exports['qbr-core']:Trim(Citizen.InvokeNative(0xE8522D58,vehicle))
+    return exports['dcr-core']:Trim(Citizen.InvokeNative(0xE8522D58,vehicle))
 end)
 
 exports("DeleteVehicle",function(vehicle)
@@ -327,17 +327,17 @@ function Notify(id, text, duration, subtext, dict, icon, color)
 	local colour = tostring(color) or 'COLOR_WHITE'
 
     local notifications = {
-        [1] = function() return exports['qbr-core']:ShowTooltip(display, length) end,
-        [2] = function() return exports['qbr-core']:DisplayRightText(display, length) end,
-        [3] = function() return exports['qbr-core']:ShowObjective(display, length) end,
-        [4] = function() return exports['qbr-core']:ShowBasicTopNotification(display, length) end,
-        [5] = function() return exports['qbr-core']:ShowSimpleCenterText(display, length) end,
-        [6] = function() return exports['qbr-core']:ShowLocationNotification(display, subdisplay, length) end,
-        [7] = function() return exports['qbr-core']:ShowTopNotification(display, subdisplay, length) end,
+        [1] = function() return exports['dcr-core']:ShowTooltip(display, length) end,
+        [2] = function() return exports['dcr-core']:DisplayRightText(display, length) end,
+        [3] = function() return exports['dcr-core']:ShowObjective(display, length) end,
+        [4] = function() return exports['dcr-core']:ShowBasicTopNotification(display, length) end,
+        [5] = function() return exports['dcr-core']:ShowSimpleCenterText(display, length) end,
+        [6] = function() return exports['dcr-core']:ShowLocationNotification(display, subdisplay, length) end,
+        [7] = function() return exports['dcr-core']:ShowTopNotification(display, subdisplay, length) end,
         [8] = function() if not LoadTexture(dictionary) then LoadTexture('generic_textures') end
-            return exports['qbr-core']:ShowAdvancedLeftNotification(display, subdisplay, dictionary, image, length) end,
+            return exports['dcr-core']:ShowAdvancedLeftNotification(display, subdisplay, dictionary, image, length) end,
         [9] = function() if not LoadTexture(dictionary) then LoadTexture('generic_textures') end
-            return exports['qbr-core']:ShowAdvancedRightNotification(display, dictionary, image, colour, length) end
+            return exports['dcr-core']:ShowAdvancedRightNotification(display, dictionary, image, colour, length) end
     }
 
     if not notifications[id] then
@@ -353,16 +353,16 @@ exports('Notify', Notify)
 exports('CreateBlip', function(uniqueId, label, x, y, z, sprite, scale, rotation, radius)
     if type(sprite) == 'string' then sprite = GetHashKey(sprite) end
     if radius then
-        QBCore.Blips[uniqueId] = Citizen.InvokeNative(0x45F13B7E0A15C880, 1664425300, x, y, z, radius)
+        DCCore.Blips[uniqueId] = Citizen.InvokeNative(0x45F13B7E0A15C880, 1664425300, x, y, z, radius)
     else
-        QBCore.Blips[uniqueId] = Citizen.InvokeNative(0x554D9D53F696D002, 1664425300, x, y, z)
+        DCCore.Blips[uniqueId] = Citizen.InvokeNative(0x554D9D53F696D002, 1664425300, x, y, z)
     end
-    if label then Citizen.InvokeNative(0x9CB1A1623062F402, QBCore.Blips[uniqueId], label) end
-    if sprite then SetBlipSprite(QBCore.Blips[uniqueId], sprite) end
-    if scale then SetBlipScale(QBCore.Blips[uniqueId], scale) end
-    if rotation then SetBlipRotation(QBCore.Blips[uniqueId], rotation) end
+    if label then Citizen.InvokeNative(0x9CB1A1623062F402, DCCore.Blips[uniqueId], label) end
+    if sprite then SetBlipSprite(DCCore.Blips[uniqueId], sprite) end
+    if scale then SetBlipScale(DCCore.Blips[uniqueId], scale) end
+    if rotation then SetBlipRotation(DCCore.Blips[uniqueId], rotation) end
 end)
 
 exports('DeleteBlip', function(uniqueId)
-    RemoveBlip(QBCore.Blips[uniqueId])
+    RemoveBlip(DCCore.Blips[uniqueId])
 end)
