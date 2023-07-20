@@ -1,12 +1,12 @@
-QBCore = {}
-QBCore.Player = {}
-QBCore.Players = {}
-QBCore.UseableItems = {}
-QBCore.ServerCallbacks = {}
+DCCore = {}
+DCCore.Player = {}
+DCCore.Players = {}
+DCCore.UseableItems = {}
+DCCore.ServerCallbacks = {}
 
 function GetPlayers()
     local sources = {}
-    for k, v in pairs(QBCore.Players) do
+    for k, v in pairs(DCCore.Players) do
         sources[#sources+1] = k
     end
     return sources
@@ -14,8 +14,8 @@ end
 exports('GetPlayers', GetPlayers)
 
 -- Returns the entire player object
-exports('GetQBPlayers', function()
-    return QBCore.Players
+exports('GetDCPlayers', function()
+    return DCCore.Players
 end)
 
 -- Returns a player's specific identifier
@@ -33,16 +33,16 @@ exports('GetIdentifier', GetIdentifier)
 
 -- Returns the object of a single player by ID
 function GetPlayer(source)
-    return QBCore.Players[source]
+    return DCCore.Players[source]
 end
 exports('GetPlayer', GetPlayer)
 
 -- Returns the object of a single player by Citizen ID
 exports('GetPlayerByCitizenId', function(citizenid)
-    for k, v in pairs(QBCore.Players) do
+    for k, v in pairs(DCCore.Players) do
         local cid = citizenid
-        if QBCore.Players[k].PlayerData.citizenid == cid then
-            return QBCore.Players[k]
+        if DCCore.Players[k].PlayerData.citizenid == cid then
+            return DCCore.Players[k]
         end
     end
     return nil
@@ -52,7 +52,7 @@ end)
 exports('GetPlayersOnDuty', function(job)
     local players = {}
     local count = 0
-    for k, v in pairs(QBCore.Players) do
+    for k, v in pairs(DCCore.Players) do
         if v.PlayerData.job.name == job then
             if v.PlayerData.job.onduty then
                 players[#players + 1] = k
@@ -66,7 +66,7 @@ end)
 -- Returns only the amount of players on duty for the specified job
 exports('GetDutyCount', function(job)
     local count = 0
-    for k, v in pairs(QBCore.Players) do
+    for k, v in pairs(DCCore.Players) do
         if v.PlayerData.job.name == job then
             if v.PlayerData.job.onduty then
                 count = count + 1
@@ -79,13 +79,13 @@ end)
 -- Callbacks
 
 function CreateCallback(name, cb)
-    QBCore.ServerCallbacks[name] = cb
+    DCCore.ServerCallbacks[name] = cb
 end
 exports('CreateCallback', CreateCallback)
 
 function TriggerCallback(name, source, cb, ...)
-    if not QBCore.ServerCallbacks[name] then return end
-    QBCore.ServerCallbacks[name](source, cb, ...)
+    if not DCCore.ServerCallbacks[name] then return end
+    DCCore.ServerCallbacks[name](source, cb, ...)
 end
 exports('TriggerCallback', TriggerCallback)
 
@@ -93,22 +93,22 @@ exports('TriggerCallback', TriggerCallback)
 
 -- Creates an item as usable
 exports('CreateUseableItem', function(item, cb)
-    QBCore.UseableItems[item] = cb
+    DCCore.UseableItems[item] = cb
 end)
 
 -- Checks if an item can be used
 exports('CanUseItem', function(item)
-    return QBCore.UseableItems[item]
+    return DCCore.UseableItems[item]
 end)
 
 -- Uses an item
 exports('UseItem', function(source, item)
-    QBCore.UseableItems[item.name](source, item)
+    DCCore.UseableItems[item.name](source, item)
 end)
 
 -- Kick Player with reason
 exports('KickPlayer', function(source, reason, setKickReason, deferrals)
-    reason = '\n' .. reason .. '\n🔸 Check our Discord for further information: ' .. QBConfig.Discord
+    reason = '\n' .. reason .. '\n🔸 Check our Discord for further information: ' .. DCConfig.Discord
     if setKickReason then
         setKickReason(reason)
     end
@@ -144,7 +144,7 @@ end)
 function AddPermission(source, permission)
     local src = source
     local license = GetIdentifier(src, 'license')
-    ExecuteCommand(('add_principal identifier.%s qbcore.%s'):format(license, permission))
+    ExecuteCommand(('add_principal identifier.%s DCcore.%s'):format(license, permission))
     RefreshCommands(src)
 end
 exports('AddPermission', AddPermission)
@@ -154,13 +154,13 @@ function RemovePermission(source, permission)
     local license = GetIdentifier(src, 'license')
     if permission then
         if IsPlayerAceAllowed(src, permission) then
-            ExecuteCommand(('remove_principal identifier.%s qbcore.%s'):format(license, permission))
+            ExecuteCommand(('remove_principal identifier.%s DCcore.%s'):format(license, permission))
             RefreshCommands(src)
         end
     else
-        for k,v in pairs(QBConfig.Permissions) do
+        for k,v in pairs(DCConfig.Permissions) do
             if IsPlayerAceAllowed(src, v) then
-                ExecuteCommand(('remove_principal identifier.%s qbcore.%s'):format(license, v))
+                ExecuteCommand(('remove_principal identifier.%s DCcore.%s'):format(license, v))
                 RefreshCommands(src)
             end
         end
@@ -180,7 +180,7 @@ exports('HasPermission', HasPermission)
 function GetPermissions(source)
     local src = source
     local perms = {}
-    for k,v in pairs (QBConfig.Permissions) do
+    for k,v in pairs (DCConfig.Permissions) do
         if IsPlayerAceAllowed(src, v) then
             perms[v] = true
         end
