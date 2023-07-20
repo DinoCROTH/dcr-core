@@ -1,38 +1,38 @@
 -- Player load and unload handling
 -- New method for checking if logged in across all scripts (optional)
 -- if LocalPlayer.state['isLoggedIn'] then
-RegisterNetEvent('QBCore:Client:OnPlayerLoaded', function()
+RegisterNetEvent('DCCore:Client:OnPlayerLoaded', function()
     ShutdownLoadingScreenNui()
     LocalPlayer.state:set('isLoggedIn', true, false)
-    if QBConfig.EnablePVP then
+    if DCConfig.EnablePVP then
         Citizen.InvokeNative(0xF808475FA571D823, true)
         SetRelationshipBetweenGroups(5, `PLAYER`, `PLAYER`)
     end
-    if QBConfig.Player.RevealMap then
+    if DCConfig.Player.RevealMap then
 		SetMinimapHideFow(true)
 	end
 end)
 
-RegisterNetEvent('QBCore:Client:OnPlayerUnload', function()
+RegisterNetEvent('DCCore:Client:OnPlayerUnload', function()
     LocalPlayer.state:set('isLoggedIn', false, false)
 end)
 
-RegisterNetEvent('QBCore:Client:PvpHasToggled', function(pvp_state)
+RegisterNetEvent('DCCore:Client:PvpHasToggled', function(pvp_state)
     NetworkSetFriendlyFireOption(pvp_state)
 end)
 
--- QBCore Teleport Events
-RegisterNetEvent('QBCore:Command:TeleportToPlayer', function(coords)
+-- DCCore Teleport Events
+RegisterNetEvent('DCCore:Command:TeleportToPlayer', function(coords)
     local ped = PlayerPedId()
     SetEntityCoords(ped, coords.x, coords.y, coords.z)
 end)
 
-RegisterNetEvent('QBCore:Command:TeleportToCoords', function(x, y, z)
+RegisterNetEvent('DCCore:Command:TeleportToCoords', function(x, y, z)
     local ped = PlayerPedId()
     SetEntityCoords(ped, x, y, z)
 end)
 
-RegisterNetEvent('QBCore:Command:GoToMarker', function()
+RegisterNetEvent('DCCore:Command:GoToMarker', function()
     local PlayerPedId = PlayerPedId
     local GetEntityCoords = GetEntityCoords
     local GetGroundZAndNormalFor_3dCoord = GetGroundZAndNormalFor_3dCoord
@@ -117,20 +117,20 @@ end)
 
 -- Vehicle | Horse Events
 
-RegisterNetEvent('QBCore:Command:SpawnVehicle', function(model)
-    local vehicle = exports['qbr-core']:SpawnVehicle(model)
+RegisterNetEvent('DCCore:Command:SpawnVehicle', function(model)
+    local vehicle = exports['dcr-core']:SpawnVehicle(model)
 	TaskWarpPedIntoVehicle(PlayerPedId(), vehicle, -1)
 end)
 
-RegisterNetEvent('QBCore:Command:DeleteVehicle', function()
+RegisterNetEvent('DCCore:Command:DeleteVehicle', function()
 	local ped = PlayerPedId()
-	local vehicle = exports['qbr-core']:GetClosestVehicle()
+	local vehicle = exports['dcr-core']:GetClosestVehicle()
 	if IsPedInAnyVehicle(ped) then vehicle = GetVehiclePedIsIn(ped, false) end
     SetEntityAsMissionEntity(vehicle, true, true)
     DeleteVehicle(vehicle)
 end)
 
-RegisterNetEvent('QBCore:Command:GetCoords', function()
+RegisterNetEvent('DCCore:Command:GetCoords', function()
     local ped = PlayerPedId()
     local pos = GetEntityCoords(ped, false)
     local heading = GetEntityHeading(ped)
@@ -138,7 +138,7 @@ RegisterNetEvent('QBCore:Command:GetCoords', function()
     DisplayOnscreenKeyboard(1, "FMMC_KEY_TIP12", "", vector4(pos.x, pos.y, pos.z, heading), "", "", "", 150)
 end)
 
-RegisterNetEvent('QBCore:Command:SpawnHorse', function(HorseName)
+RegisterNetEvent('DCCore:Command:SpawnHorse', function(HorseName)
     local ped = PlayerPedId()
     local hash = tostring(HorseName)
     if hash then
@@ -176,38 +176,38 @@ end)
 
 -- Other stuff
 
-RegisterNetEvent('QBCore:Player:SetPlayerData', function(val)
-    QBCore.PlayerData = val
+RegisterNetEvent('DCCore:Player:SetPlayerData', function(val)
+    DCCore.PlayerData = val
 end)
 
-RegisterNetEvent('QBCore:Player:UpdatePlayerData', function()
-    TriggerServerEvent('QBCore:UpdatePlayer')
+RegisterNetEvent('DCCore:Player:UpdatePlayerData', function()
+    TriggerServerEvent('DCCore:UpdatePlayer')
 end)
 
-RegisterNetEvent('QBCore:Notify', function(id, text, duration, subtext, dict, icon, color)
+RegisterNetEvent('DCCore:Notify', function(id, text, duration, subtext, dict, icon, color)
     Notify(id, text, duration, subtext, dict, icon, color)
 end)
 
-RegisterNetEvent('QBCore:Client:UseItem', function(item)
-    TriggerServerEvent('QBCore:Server:UseItem', item)
+RegisterNetEvent('DCCore:Client:UseItem', function(item)
+    TriggerServerEvent('DCCore:Server:UseItem', item)
 end)
 
-RegisterNetEvent('QBCore:Client:TriggerCallback', function(name, ...)
-    if QBCore.ServerCallbacks[name] then
-        QBCore.ServerCallbacks[name](...)
-        QBCore.ServerCallbacks[name] = nil
+RegisterNetEvent('DCCore:Client:TriggerCallback', function(name, ...)
+    if DCCore.ServerCallbacks[name] then
+        DCCore.ServerCallbacks[name](...)
+        DCCore.ServerCallbacks[name] = nil
     end
 end)
 
 -- Listen to Shared being updated
-RegisterNetEvent('QBCore:Client:OnSharedUpdate', function(tableName, key, value)
-    QBCore.Shared[tableName][key] = value
-    TriggerEvent('QBCore:Client:UpdateObject')
+RegisterNetEvent('DCCore:Client:OnSharedUpdate', function(tableName, key, value)
+    DCCore.Shared[tableName][key] = value
+    TriggerEvent('DCCore:Client:UpdateObject')
 end)
 
-RegisterNetEvent('QBCore:Client:OnSharedUpdateMultiple', function(tableName, values)
+RegisterNetEvent('DCCore:Client:OnSharedUpdateMultiple', function(tableName, values)
     for key, value in pairs(values) do
-        QBCore.Shared[tableName][key] = value
+        DCCore.Shared[tableName][key] = value
     end
-    TriggerEvent('QBCore:Client:UpdateObject')
+    TriggerEvent('DCCore:Client:UpdateObject')
 end)
