@@ -4,13 +4,13 @@ exports('AddJob', function(jobName, job)
         return false, "invalid_job_name"
     end
 
-    if QBCore.Shared.Jobs[jobName] then
+    if DCCore.Shared.Jobs[jobName] then
         return false, "job_exists"
     end
 
-    QBCore.Shared.Jobs[jobName] = job
-    TriggerClientEvent('QBCore:Client:OnSharedUpdate', -1,'Jobs', jobName, job)
-    TriggerEvent('QBCore:Server:UpdateObject')
+    DCCore.Shared.Jobs[jobName] = job
+    TriggerClientEvent('DCCore:Client:OnSharedUpdate', -1,'Jobs', jobName, job)
+    TriggerEvent('DCCore:Server:UpdateObject')
     return true, "success"
 end)
 
@@ -27,19 +27,19 @@ exports('AddJobs', function(jobs)
             break
         end
 
-        if QBCore.Shared.Jobs[key] then
+        if DCCore.Shared.Jobs[key] then
             message = 'job_exists'
             shouldContinue = false
             errorItem = jobs[key]
             break
         end
 
-        QBCore.Shared.Jobs[key] = value
+        DCCore.Shared.Jobs[key] = value
     end
 
     if not shouldContinue then return false, message, errorItem end
-    TriggerClientEvent('QBCore:Client:OnSharedUpdateMultiple', -1, 'Jobs', jobs)
-    TriggerEvent('QBCore:Server:UpdateObject')
+    TriggerClientEvent('DCCore:Client:OnSharedUpdateMultiple', -1, 'Jobs', jobs)
+    TriggerEvent('DCCore:Server:UpdateObject')
     return true, message, nil
 end)
 
@@ -49,13 +49,13 @@ exports('AddItem', function(itemName, item)
         return false, "invalid_item_name"
     end
 
-    if QBCore.Shared.Items[itemName] then
+    if DCCore.Shared.Items[itemName] then
         return false, "item_exists"
     end
 
-    QBCore.Shared.Items[itemName] = item
-    TriggerClientEvent('QBCore:Client:OnSharedUpdate', -1, 'Items', itemName, item)
-    TriggerEvent('QBCore:Server:UpdateObject')
+    DCCore.Shared.Items[itemName] = item
+    TriggerClientEvent('DCCore:Client:OnSharedUpdate', -1, 'Items', itemName, item)
+    TriggerEvent('DCCore:Server:UpdateObject')
     return true, "success"
 end)
 
@@ -72,19 +72,19 @@ exports('AddItems', function(items)
             break
         end
 
-        if QBCore.Shared.Items[key] then
+        if DCCore.Shared.Items[key] then
             message = "item_exists"
             shouldContinue = false
             errorItem = items[key]
             break
         end
 
-        QBCore.Shared.Items[key] = value
+        DCCore.Shared.Items[key] = value
     end
 
     if not shouldContinue then return false, message, errorItem end
-    TriggerClientEvent('QBCore:Client:OnSharedUpdateMultiple', -1, 'Items', items)
-    TriggerEvent('QBCore:Server:UpdateObject')
+    TriggerClientEvent('DCCore:Client:OnSharedUpdateMultiple', -1, 'Items', items)
+    TriggerEvent('DCCore:Server:UpdateObject')
     return true, message, nil
 end)
 
@@ -93,13 +93,13 @@ exports('AddGang', function(gangName, gang)
     if type(gangName) ~= "string" then
         return false, "invalid_gang_name"
     end
-    if QBCore.Shared.Gangs[gangName] then
+    if DCCore.Shared.Gangs[gangName] then
         return false, "gang_exists"
     end
 
-    QBCore.Shared.Gangs[gangName] = gang
-    TriggerClientEvent('QBCore:Client:OnSharedUpdate', -1, 'Gangs', gangName, gang)
-    TriggerEvent('QBCore:Server:UpdateObject')
+    DCCore.Shared.Gangs[gangName] = gang
+    TriggerClientEvent('DCCore:Client:OnSharedUpdate', -1, 'Gangs', gangName, gang)
+    TriggerEvent('DCCore:Server:UpdateObject')
     return true, "success"
 end)
 
@@ -116,17 +116,17 @@ exports('AddGangs', function(gangs)
             break
         end
 
-        if QBCore.Shared.Gangs[key] then
+        if DCCore.Shared.Gangs[key] then
             message = "gang_exists"
             shouldContinue = false
             errorItem = gangs[key]
             break
         end
-        QBCore.Shared.Gangs[key] = value
+        DCCore.Shared.Gangs[key] = value
     end
 
     if not shouldContinue then return false, message, errorItem end
-    TriggerClientEvent('QBCore:Client:OnSharedUpdateMultiple', -1, 'Gangs', gangs)
-    TriggerEvent('QBCore:Server:UpdateObject')
+    TriggerClientEvent('DCCore:Client:OnSharedUpdateMultiple', -1, 'Gangs', gangs)
+    TriggerEvent('DCCore:Server:UpdateObject')
     return true, message, nil
 end)
