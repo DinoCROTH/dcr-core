@@ -38,19 +38,19 @@ local function KeyPressed()
     end)
 end
 
-RegisterNetEvent('qbr-drawtext:client:DrawText', function(text, position)
+RegisterNetEvent('dcr-drawtext:client:DrawText', function(text, position)
     DrawText(text, position)
 end)
 
-RegisterNetEvent('qbr-drawtext:client:ChangeText', function(text, position)
+RegisterNetEvent('dcr-drawtext:client:ChangeText', function(text, position)
     ChangeText(text, position)
 end)
 
-RegisterNetEvent('qbr-drawtext:client:HideText', function()
+RegisterNetEvent('dcr-drawtext:client:HideText', function()
     HideText()
 end)
 
-RegisterNetEvent('qbr-drawtext:client:KeyPressed', function()
+RegisterNetEvent('dcr-drawtext:client:KeyPressed', function()
     KeyPressed()
 end)
 
